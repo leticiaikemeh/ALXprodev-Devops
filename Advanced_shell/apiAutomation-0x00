@@ -1,0 +1,21 @@
+#!/bin/bash
+
+URL="https://pokeapi.co/api/v2/pokemon/pikachu"
+
+# Make the request, save to data.json, and check the HTTP status
+curl -s -w "%{http_code}" "$URL" -o data.json > response_status.txt
+
+# Read the status code
+status=$(cat response_status.txt)
+
+if [ "$status" -eq 200 ]; then
+    # Success: do nothing or print success message
+    echo "Data for Pikachu saved to data.json"
+else
+    # Failure: log error and remove data.json
+    echo "Error: Failed to retrieve data, HTTP status $status" >> errors.txt
+    rm -f data.json
+fi
+
+# Clean up
+rm response_status.txt
